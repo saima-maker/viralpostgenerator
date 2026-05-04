@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viral Post Generator | Saima Qureshi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #E91E8C;
+    --pink-light: #F472B6;
+    --pink-pale: #FDF2F8;
+    --purple: #7C3AED;
+    --dark: #1A0A2E;
+    --white: #FFFFFF;
+    --gray: #6B7280;
+    --border: #F9A8D4;
+    --green: #059669;
+    --green-light: #D1FAE5;
+    --blue: #2563EB;
+    --blue-light: #DBEAFE;
+    --yellow: #D97706;
+    --yellow-light: #FEF3C7;
+  }
+- { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+font-family: ‘DM Sans’, sans-serif;
+background: var(–pink-pale);
+min-height: 100vh;
+color: var(–dark);
+}
+.hero {
+background: linear-gradient(135deg, var(–pink) 0%, var(–purple) 100%);
+padding: 60px 24px 80px;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+.hero::before {
+content: ‘’;
+position: absolute;
+top: -50%;
+left: -50%;
+width: 200%;
+height: 200%;
+background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+radial-gradient(circle at 70% 20%, rgba(255,255,255,0.05) 0%, transparent 40%);
+pointer-events: none;
+}
+.hero-badge {
+display: inline-block;
+background: rgba(255,255,255,0.2);
+color: white;
+font-size: 12px;
+font-weight: 600;
+letter-spacing: 2px;
+text-transform: uppercase;
+padding: 6px 16px;
+border-radius: 100px;
+margin-bottom: 20px;
+border: 1px solid rgba(255,255,255,0.3);
+}
+.hero h1 {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(26px, 6vw, 46px);
+color: white;
+line-height: 1.15;
+margin-bottom: 16px;
+position: relative;
+}
+.hero p {
+color: rgba(255,255,255,0.85);
+font-size: 15px;
+max-width: 520px;
+margin: 0 auto 20px;
+line-height: 1.6;
+}
+.hero-features {
+display: flex;
+justify-content: center;
+gap: 16px;
+flex-wrap: wrap;
+}
+.hero-feature {
+background: rgba(255,255,255,0.15);
+border: 1px solid rgba(255,255,255,0.25);
+color: white;
+font-size: 12px;
+font-weight: 600;
+padding: 6px 14px;
+border-radius: 100px;
+}
+.emoji-row {
+font-size: 28px;
+margin-bottom: 16px;
+}
+.container {
+max-width: 700px;
+margin: -40px auto 0;
+padding: 0 16px 60px;
+position: relative;
+}
+.card {
+background: white;
+border-radius: 24px;
+padding: 36px 28px;
+box-shadow: 0 20px 60px rgba(233,30,140,0.12), 0 4px 16px rgba(0,0,0,0.06);
+margin-bottom: 24px;
+}
+.card-title {
+font-family: ‘Playfair Display’, serif;
+font-size: 20px;
+color: var(–dark);
+margin-bottom: 24px;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.card-title span {
+background: linear-gradient(135deg, var(–pink), var(–purple));
+color: white;
+width: 32px;
+height: 32px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 14px;
+font-family: ‘DM Sans’, sans-serif;
+font-weight: 600;
+flex-shrink: 0;
+}
+.field-group { margin-bottom: 20px; }
+label {
+display: block;
+font-size: 13px;
+font-weight: 600;
+color: var(–dark);
+margin-bottom: 8px;
+letter-spacing: 0.3px;
+}
+label em {
+font-weight: 400;
+color: var(–gray);
+font-style: normal;
+}
+input, textarea {
+width: 100%;
+padding: 14px 16px;
+border: 2px solid #F3E8FF;
+border-radius: 12px;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 15px;
+color: var(–dark);
+background: #FDFAFF;
+transition: border-color 0.2s, box-shadow 0.2s;
+outline: none;
+resize: vertical;
+}
+input:focus, textarea:focus {
+border-color: var(–pink);
+box-shadow: 0 0 0 4px rgba(233,30,140,0.08);
+background: white;
+}
+input::placeholder, textarea::placeholder { color: #C4B5C8; }
+textarea { min-height: 80px; }
+.example-tag {
+display: inline-block;
+background: var(–pink-pale);
+color: var(–pink);
+font-size: 11px;
+font-weight: 600;
+padding: 3px 10px;
+border-radius: 100px;
+margin-top: 8px;
+border: 1px solid var(–border);
+}
+.generate-btn {
+width: 100%;
+background: linear-gradient(135deg, var(–pink) 0%, var(–purple) 100%);
+color: white;
+border: none;
+border-radius: 14px;
+padding: 18px 24px;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+box-shadow: 0 8px 24px rgba(233,30,140,0.3);
+}
+.generate-btn:hover {
+transform: translateY(-2px);
+box-shadow: 0 12px 32px rgba(233,30,140,0.4);
+}
+.generate-btn:disabled {
+opacity: 0.7;
+cursor: not-allowed;
+transform: none;
+}
+.loading {
+display: none;
+text-align: center;
+padding: 40px 20px;
+}
+.loading.show { display: block; }
+.spinner {
+width: 44px;
+height: 44px;
+border: 3px solid var(–border);
+border-top-color: var(–pink);
+border-radius: 50%;
+animation: spin 0.8s linear infinite;
+margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading p {
+color: var(–gray);
+font-size: 14px;
+line-height: 1.6;
+}
+.loading strong {
+display: block;
+color: var(–dark);
+font-size: 16px;
+margin-bottom: 6px;
+}
+.results { display: none; }
+.results.show { display: block; }
+.results-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 20px;
+gap: 12px;
+flex-wrap: wrap;
+}
+.results-title {
+font-family: ‘Playfair Display’, serif;
+font-size: 22px;
+color: var(–dark);
+}
+.results-count {
+background: linear-gradient(135deg, var(–pink), var(–purple));
+color: white;
+font-size: 12px;
+font-weight: 700;
+padding: 4px 12px;
+border-radius: 100px;
+}
+.copy-all-btn {
+width: 100%;
+background: white;
+color: var(–pink);
+border: 2px solid var(–pink);
+border-radius: 12px;
+padding: 14px 20px;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 14px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s;
+margin-bottom: 20px;
+}
+.copy-all-btn:hover {
+background: var(–pink);
+color: white;
+}
+.post-card {
+background: white;
+border-radius: 20px;
+padding: 24px;
+margin-bottom: 20px;
+border: 2px solid #F9F0FF;
+transition: border-color 0.2s, box-shadow 0.2s;
+position: relative;
+}
+.post-card:hover {
+border-color: var(–border);
+box-shadow: 0 4px 20px rgba(233,30,140,0.08);
+}
+.post-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 16px;
+}
+.post-type-badge {
+display: inline-block;
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 1px;
+text-transform: uppercase;
+padding: 4px 12px;
+border-radius: 100px;
+}
+.badge-engagement { background: var(–yellow-light); color: var(–yellow); }
+.badge-sales { background: #FCE7F3; color: var(–pink); }
+.post-number {
+width: 28px;
+height: 28px;
+background: var(–pink-pale);
+color: var(–pink);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 11px;
+font-weight: 700;
+flex-shrink: 0;
+}
+.section-label {
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+margin-bottom: 8px;
+display: flex;
+align-items: center;
+gap: 6px;
+}
+.section-label.post-label { color: var(–pink); }
+.section-label.reply-label { color: var(–green); }
+.section-label.where-label { color: var(–blue); }
+.section-content {
+font-size: 14px;
+line-height: 1.7;
+color: var(–dark);
+white-space: pre-wrap;
+padding: 12px 14px;
+border-radius: 10px;
+margin-bottom: 12px;
+}
+.post-content { background: #FDF2F8; border: 1px solid #FCE7F3; }
+.reply-content { background: #F0FDF4; border: 1px solid #BBF7D0; color: #065F46; }
+.where-content { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF; }
+.section-actions {
+display: flex;
+gap: 8px;
+margin-bottom: 14px;
+}
+.copy-section-btn {
+flex: 1;
+border: none;
+border-radius: 8px;
+padding: 8px 12px;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 12px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s;
+}
+.copy-post-btn { background: #FCE7F3; color: var(–pink); }
+.copy-post-btn:hover { background: var(–pink); color: white; }
+.copy-reply-btn { background: var(–green-light); color: var(–green); }
+.copy-reply-btn:hover { background: var(–green); color: white; }
+.copy-where-btn { background: var(–blue-light); color: var(–blue); }
+.copy-where-btn:hover { background: var(–blue); color: white; }
+.copy-section-btn.copied {
+background: #D1FAE5 !important;
+color: #065F46 !important;
+}
+.divider {
+height: 1px;
+background: #F3E8FF;
+margin: 14px 0;
+}
+.post-footer {
+display: flex;
+gap: 8px;
+}
+.copy-all-post-btn {
+flex: 1;
+background: linear-gradient(135deg, var(–pink), var(–purple));
+color: white;
+border: none;
+border-radius: 8px;
+padding: 10px 14px;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 13px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s;
+}
+.copy-all-post-btn:hover { opacity: 0.9; }
+.copy-all-post-btn.copied { background: var(–green); }
+.regen-btn {
+background: white;
+color: var(–gray);
+border: 1px solid #E5E7EB;
+border-radius: 8px;
+padding: 10px 14px;
+font-family: ‘DM Sans’, sans-serif;
+font-size: 13px;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.2s;
+}
+.regen-btn:hover { border-color: var(–pink); color: var(–pink); }
+.error-msg {
+display: none;
+background: #FEF2F2;
+border: 1px solid #FECACA;
+color: #DC2626;
+padding: 14px 16px;
+border-radius: 12px;
+font-size: 14px;
+margin-top: 16px;
+}
+.error-msg.show { display: block; }
+.tip-box {
+background: linear-gradient(135deg, #FDF2F8, #F5F3FF);
+border: 1px solid var(–border);
+border-radius: 14px;
+padding: 20px;
+margin-top: 8px;
+}
+.tip-box h4 {
+font-size: 13px;
+font-weight: 700;
+color: var(–pink);
+margin-bottom: 10px;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+}
+.tip-item {
+display: flex;
+gap: 10px;
+margin-bottom: 8px;
+font-size: 13px;
+color: var(–gray);
+line-height: 1.5;
+}
+.tip-item:last-child { margin-bottom: 0; }
+.footer {
+text-align: center;
+padding: 20px;
+color: var(–gray);
+font-size: 12px;
+}
+.footer strong { color: var(–pink); }
+@media (max-width: 480px) {
+.card { padding: 24px 18px; }
+.hero { padding: 48px 20px 70px; }
+.hero-features { gap: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="emoji-row">💜✨💰</div>
+  <div class="hero-badge">Complete System</div>
+  <h1>Viral Post Generator</h1>
+  <p>Get 20 ready-to-use Facebook group posts — complete with what to post, what to reply and exactly where to post for maximum leads and sales.</p>
+  <div class="hero-features">
+    <div class="hero-feature">📝 The Post</div>
+    <div class="hero-feature">💬 The Reply Script</div>
+    <div class="hero-feature">📍 Where to Post</div>
+  </div>
+</div>
+<div class="container">
+  <div class="card">
+    <div class="card-title">
+      <span>1</span>
+      Tell me about your business
+    </div>
+```
+<div class="field-group">
+  <label>Your niche <em>(who do you help?)</em></label>
+  <input type="text" id="niche" placeholder="e.g. life coaches, skincare sellers, course creators, fitness coaches" />
+  <div class="example-tag">Example: women who sell digital products online</div>
+</div>
+<div class="field-group">
+  <label>What you sell <em>(your offer)</em></label>
+  <input type="text" id="offer" placeholder="e.g. a skincare line, online course, coaching program, digital templates" />
+</div>
+<div class="field-group">
+  <label>The transformation you provide <em>(what result do your customers get?)</em></label>
+  <textarea id="transformation" placeholder="e.g. glowing clear skin in 30 days, lose 20 pounds without starving, make their first $1,000 online without ads"></textarea>
+</div>
+<button class="generate-btn" id="generateBtn" onclick="generatePosts()">
+  ✨ Generate My 20 Viral Posts
+</button>
+<div class="error-msg" id="errorMsg"></div>
+```
+  </div>
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <strong>Creating your complete post system...</strong>
+    <p>Generating 20 viral posts with reply scripts<br>and posting locations. This takes about 30 seconds.</p>
+  </div>
+  <div class="results" id="results">
+    <div class="card">
+      <div class="results-header">
+        <div class="results-title">Your 20 Viral Posts</div>
+        <div class="results-count">20 complete posts</div>
+      </div>
+      <button class="copy-all-btn" onclick="copyAll()">📋 Copy All 20 Posts</button>
+      <div id="postsContainer"></div>
+    </div>
+```
+<div class="tip-box">
+  <h4>💜 Saima's Pro Tips</h4>
+  <div class="tip-item">📱 Add each post to a bright colored background in Canva before posting</div>
+  <div class="tip-item">⏰ Let comments pile up for 2-3 hours before replying — then reply in batches of 10</div>
+  <div class="tip-item">💬 Use the reply script for EVERY comment — personalize the name at the start</div>
+  <div class="tip-item">📍 Post in 10-30 groups daily using the suggested group types for maximum reach</div>
+  <div class="tip-item">💰 Engagement posts grow your list. Sales posts make you money. Use both every day.</div>
+</div>
+```
+  </div>
+</div>
+<div class="footer">
+  Built by <strong>Saima Qureshi</strong> | The Go Viral on Facebook Formula 💜
+</div>
+<script>
+  let generatedPosts = [];
+  async function generatePosts() {
+    const niche = document.getElementById('niche').value.trim();
+    const offer = document.getElementById('offer').value.trim();
+    const transformation = document.getElementById('transformation').value.trim();
+    if (!niche || !offer || !transformation) {
+      showError('Please fill in all three fields before generating your posts.');
+      return;
+    }
+    hideError();
+    showLoading();
+    hideResults();
+    const btn = document.getElementById('generateBtn');
+    btn.disabled = true;
+    const prompt = `You are Saima Qureshi, an expert at creating viral Facebook group posts that get 100-300+ comments and turn into leads and sales for any business niche.
+Generate exactly 20 Facebook group posts for this business:
+Niche: ${niche}
+What they sell: ${offer}
+Transformation they provide: ${transformation}
+CRITICAL RULES FOR ALL POSTS:
+1. Every post must be SHORT — maximum 3-4 lines
+2. Designed to trigger mass comments (100-300+)
+3. No dashes anywhere in any post or reply
+4. Full sentences only — never fragments
+5. Use emojis naturally at the end
+6. Never use bullet points or numbered lists inside posts
+7. Feel real and human — not AI generated
+8. Always end with a clear call to action
+CREATE EXACTLY 10 ENGAGEMENT POSTS using these formats:
+- "In ONE word only what do you [relevant question for their niche]? 😍"
+- "Who here is a [their customer type]? Show me your hand! 👋"
+- "True or False: [bold statement relevant to their niche and transformation] 👇"
+- "I want [transformation] but ______ 👇"
+- "As a [niche business owner] I hate when ______. Fill in the blank! 👇"
+- "What is your biggest struggle with [getting the transformation]? Drop it below 👇"
+- "[Fun relatable question about their industry or lifestyle] 👇"
+- "To all the silent members today is your day! Say hi and tell me what you do! 😀👇"
+- "What is the best advice you would give someone just starting out with [relevant to their niche]?"
+- "[Controversial opinion relevant to their niche]. Prove me wrong! 👇"
+CREATE EXACTLY 10 SALES POSTS using these formats:
+- "I get [specific result related to their transformation] every month. I jotted down my process. Who wants a free copy? 👇"
+- "Who wants [specific transformation] in the next 30 days without [pain point]? 🙋‍♀️"
+- "Officially obsessed with [their method]. I am gifting [what they offer]. Who wants it before I make it paid? 👇"
+- "I [did the thing] and got [specific result]. I put the exact steps into a system. Want it? 🔥"
+- "Looking for [number] [their customer type] who want [transformation] ASAP. Who wants in? 👇"
+- "Who needs [transformation] right now not someday but THIS WEEK? 🙋‍♀️"
+- "My [relevant thing] used to [negative result]. Now they [positive specific result] and turn into [outcome]. Want the system? 🙋‍♀️"
+- "I am gifting [number] women [what you are giving] so you can [get transformation] without [pain point]. Who wants access? 👇"
+- "Who wants to wake up to [specific desirable result related to their transformation] tomorrow? 🙋‍♀️"
+- "Imagine [vivid picture of transformation]. I am opening up [number] spots. Who wants in? 👇"
+FOR EACH POST also provide:
+1. A SHORT personalized reply script (1-2 sentences max) that matches what the post is about — for engagement posts the reply invites them somewhere or gives them something, for sales posts the reply sends them to the offer
+2. The best types of Facebook groups to post it in (3-4 specific group types relevant to their niche and offer)
+Return ONLY a JSON array with exactly 20 objects. Each object must have:
+- "type": "engagement" or "sales"
+- "post": the complete post text
+- "reply": the reply script to use when people comment (include [Name] placeholder at start and [your link] where relevant)
+- "whereToPost": a single sentence describing the best 3-4 types of Facebook groups to post this in
+Return pure JSON only. No markdown. No backticks. No explanation.`;
+    try {
+      const response = await fetch('https://proud-paper-9874.saimaq79.workers.dev/', {
+        method: 'POST',
+        headers: {
+          
+          
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 4000,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error?.message || 'API error');
+      }
+      const data = await response.json();
+      const text = data.content[0].text.trim().replace(/```json|```/g, '').trim();
+      const posts = JSON.parse(text);
+      generatedPosts = posts;
+      displayPosts(posts);
+      hideLoading();
+      showResults();
+    } catch (err) {
+      hideLoading();
+      showError('Something went wrong. Please check your API key and try again. Error: ' + err.message);
+      console.error(err);
+    }
+    btn.disabled = false;
+  }
+  function displayPosts(posts) {
+    const container = document.getElementById('postsContainer');
+    container.innerHTML = '';
+    posts.forEach((post, index) => {
+      const isEngagement = post.type === 'engagement';
+      const card = document.createElement('div');
+      card.className = 'post-card';
+      card.innerHTML = `
+        <div class="post-header">
+          <div class="post-type-badge ${isEngagement ? 'badge-engagement' : 'badge-sales'}">
+            ${isEngagement ? '💬 Engagement Post' : '💰 Sales Post'}
+          </div>
+          <div class="post-number">${index + 1}</div>
+        </div>
+        <div class="section-label post-label">📝 Your Post</div>
+        <div class="section-content post-content" id="post-${index}">${escapeHtml(post.post)}</div>
+        <div class="section-actions">
+          <button class="copy-section-btn copy-post-btn" onclick="copySection(this, 'post-${index}')">📋 Copy Post</button>
+        </div>
+        <div class="divider"></div>
+        <div class="section-label reply-label">💬 Reply Script</div>
+        <div class="section-content reply-content" id="reply-${index}">${escapeHtml(post.reply)}</div>
+        <div class="section-actions">
+          <button class="copy-section-btn copy-reply-btn" onclick="copySection(this, 'reply-${index}')">📋 Copy Reply</button>
+        </div>
+        <div class="divider"></div>
+        <div class="section-label where-label">📍 Where to Post</div>
+        <div class="section-content where-content" id="where-${index}">${escapeHtml(post.whereToPost)}</div>
+        <div class="section-actions">
+          <button class="copy-section-btn copy-where-btn" onclick="copySection(this, 'where-${index}')">📋 Copy Location</button>
+        </div>
+        <div class="divider"></div>
+        <div class="post-footer">
+          <button class="copy-all-post-btn" onclick="copyFullPost(this, ${index})">📋 Copy Everything for Post ${index + 1}</button>
+          <button class="regen-btn" onclick="regenPost(${index})">↺ Redo</button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+  function copySection(btn, id) {
+    const el = document.getElementById(id);
+    navigator.clipboard.writeText(el.innerText).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = orig;
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+  function copyFullPost(btn, index) {
+    const post = generatedPosts[index];
+    const full = `POST:\n${post.post}\n\nREPLY SCRIPT:\n${post.reply}\n\nWHERE TO POST:\n${post.whereToPost}`;
+    navigator.clipboard.writeText(full).then(() => {
+      btn.textContent = '✓ Copied Everything!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = `📋 Copy Everything for Post ${index + 1}`;
+        btn.classList.remove('copied');
+      }, 2500);
+    });
+  }
+  async function regenPost(index) {
+    const niche = document.getElementById('niche').value.trim();
+    const offer = document.getElementById('offer').value.trim();
+    const transformation = document.getElementById('transformation').value.trim();
+    const post = generatedPosts[index];
+    const container = document.getElementById('postsContainer');
+    const cards = container.querySelectorAll('.post-card');
+    const card = cards[index];
+    card.style.opacity = '0.5';
+    card.style.pointerEvents = 'none';
+    try {
+      const response = await fetch('https://proud-paper-9874.saimaq79.workers.dev/', {
+        method: 'POST',
+        headers: {
+          
+          
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{
+            role: 'user',
+            content: `Generate ONE ${post.type} Facebook group post for:
+Niche: ${niche}
+Offer: ${offer}
+Transformation: ${transformation}
+Rules: SHORT (3-4 lines max), full sentences, no dashes, ends with clear CTA, designed to get 100-300+ comments, emojis used naturally.
+Return ONLY a JSON object with three keys:
+- "post": the complete post text
+- "reply": a short 1-2 sentence reply script for when people comment (include [Name] and [your link] placeholders)
+- "whereToPost": one sentence with 3-4 specific Facebook group types to post in
+Pure JSON only. No markdown. No backticks.`
+          }]
+        })
+      });
+      const data = await response.json();
+      const text = data.content[0].text.trim().replace(/```json|```/g, '').trim();
+      const newPost = JSON.parse(text);
+      generatedPosts[index] = { ...generatedPosts[index], ...newPost };
+      document.getElementById(`post-${index}`).innerText = newPost.post;
+      document.getElementById(`reply-${index}`).innerText = newPost.reply;
+      document.getElementById(`where-${index}`).innerText = newPost.whereToPost;
+    } catch (err) {
+      console.error('Regeneration failed:', err);
+    }
+    card.style.opacity = '1';
+    card.style.pointerEvents = 'auto';
+  }
+  function copyAll() {
+    const allPosts = generatedPosts.map((p, i) =>
+      `POST ${i + 1} (${p.type.toUpperCase()})\n\nPOST:\n${p.post}\n\nREPLY SCRIPT:\n${p.reply}\n\nWHERE TO POST:\n${p.whereToPost}`
+    ).join('\n\n' + '═'.repeat(50) + '\n\n');
+    navigator.clipboard.writeText(allPosts).then(() => {
+      const btn = document.querySelector('.copy-all-btn');
+      btn.textContent = '✓ All 20 Posts Copied!';
+      setTimeout(() => { btn.textContent = '📋 Copy All 20 Posts'; }, 3000);
+    });
+  }
+  function escapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function showLoading() { document.getElementById('loading').classList.add('show'); }
+  function hideLoading() { document.getElementById('loading').classList.remove('show'); }
+  function showResults() { document.getElementById('results').classList.add('show'); }
+  function hideResults() { document.getElementById('results').classList.remove('show'); }
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.classList.add('show');
+  }
+  function hideError() { document.getElementById('errorMsg').classList.remove('show'); }
+</script>
+</body>
+</html>
